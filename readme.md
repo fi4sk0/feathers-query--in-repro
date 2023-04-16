@@ -2,41 +2,36 @@
 
 > Repro repo for showing $in query bug
 
-## About
-
-This project uses [Feathers](http://feathersjs.com). An open source framework for building APIs and real-time applications.
-
-## Getting Started
-
-1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
-2. Install your dependencies
-
-    ```
-    cd path/to/feathers-query-in-repro
-    npm install
-    ```
-
-3. Start your app
-
-    ```
-    npm run compile # Compile TypeScript source
-    npm run migrate # Run migrations to set up the database
-    npm start
-    ```
-
-## Testing
-
-Run `npm test` and all your tests in the `test/` directory will be run.
-
-## Scaffolding
-
-This app comes with a powerful command line interface for Feathers. Here are a few things it can do:
-
+## Steps used to create this project
+```javascript
+feathers generate app
+feathers generate service // create foo service
 ```
-$ npx feathers help                           # Show all commands
-$ npx feathers generate service               # Generate a new Service
+## Instructions to reproduce
+```
+npm install
+npm run test
 ```
 
-## Help
+## Error output
+```
+TSError: ⨯ Unable to compile TypeScript:
+test/services/foo/foo.test.ts:12:7 - error TS2769: No overload matches this call.
+  Overload 1 of 4, '(params?: (FooParams & { paginate?: PaginationOptions | undefined; }) | undefined): Promise<Paginated<{ id: number; text: string; }>>', gave the following error.
+    Type '{ $in: string[]; }' is not assignable to type 'string | { [x: string]: never; [x: number]: never; [x: symbol]: never; $gt?: string | undefined; $gte?: string | undefined; $lt?: string | undefined; $lte?: string | undefined; $ne?: string | undefined; $in?: string[] | undefined; $nin?: string[] | undefined; } | undefined'.
+      Type '{ $in: string[]; }' is not assignable to type '{ [x: string]: never; [x: number]: never; [x: symbol]: never; $gt?: string | undefined; $gte?: string | undefined; $lt?: string | undefined; $lte?: string | undefined; $ne?: string | undefined; $in?: string[] | undefined; $nin?: string[] | undefined; }'.
+        Property '$in' is incompatible with index signature.
+          Type 'string[]' is not assignable to type 'never'.
+  Overload 2 of 4, '(params?: (FooParams & { paginate: false; }) | undefined): Promise<{ id: number; text: string; }[]>', gave the following error.
+    Type '{ $in: string[]; }' is not assignable to type 'string | { [x: string]: never; [x: number]: never; [x: symbol]: never; $gt?: string | undefined; $gte?: string | undefined; $lt?: string | undefined; $lte?: string | undefined; $ne?: string | undefined; $in?: string[] | undefined; $nin?: string[] | undefined; } | undefined'.
+      Type '{ $in: string[]; }' is not assignable to type '{ [x: string]: never; [x: number]: never; [x: symbol]: never; $gt?: string | undefined; $gte?: string | undefined; $lt?: string | undefined; $lte?: string | undefined; $ne?: string | undefined; $in?: string[] | undefined; $nin?: string[] | undefined; }'.
+        Property '$in' is incompatible with index signature.
+          Type 'string[]' is not assignable to type 'never'.
+  Overload 3 of 4, '(params?: FooParams | undefined): Promise<Paginated<{ id: number; text: string; }> | { id: number; text: string; }[]>', gave the following error.
+    Type '{ $in: string[]; }' is not assignable to type 'string | { [x: string]: never; [x: number]: never; [x: symbol]: never; $gt?: string | undefined; $gte?: string | undefined; $lt?: string | undefined; $lte?: string | undefined; $ne?: string | undefined; $in?: string[] | undefined; $nin?: string[] | undefined; } | undefined'.
+      Type '{ $in: string[]; }' is not assignable to type '{ [x: string]: never; [x: number]: never; [x: symbol]: never; $gt?: string | undefined; $gte?: string | undefined; $lt?: string | undefined; $lte?: string | undefined; $ne?: string | undefined; $in?: string[] | undefined; $nin?: string[] | undefined; }'.
+        Property '$in' is incompatible with index signature.
+          Type 'string[]' is not assignable to type 'never'.
 
-For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
+12       text: { $in: ['foo', 'bar']}
+```
